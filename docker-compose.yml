@@ -1,0 +1,25 @@
+version: "2"
+services:
+  express:
+    container_name: express-server
+    build:
+      context: .
+      dockerfile: ./express-server/Dockerfile
+    volumes:
+      - ./express-server:/usr/src/app
+    ports:
+      - "8080:8080"
+      
+  #angular:
+  #  container_name: angular-client
+  #  build:
+  #    context: .
+  #    dockerfile: ./angular-client/Dockerfile
+  #  ports:
+  #    - "8181:8181"
+      
+  #mongodb:
+  #  container_name: database
+  #  image: mongo:latest
+  #  ports:
+  #    - "27017:27017"
