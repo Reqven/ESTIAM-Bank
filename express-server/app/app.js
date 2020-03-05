@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const HttpError = require("http-errors");
 const HttpStatus = require("http-status-codes");
@@ -8,13 +9,14 @@ const PORT = 8080;
 const HOST = "0.0.0.0";
 const app = express();
 
-function errorHandler(error, req, res, next) {
+const errorHandler = (error, req, res, next) => {
   console.error(error);
   const isHttp = error instanceof HttpError.HttpError;
   const errorResponse = isHttp ? error : HttpError.InternalServerError();
   return res.status(errorResponse.statusCode).json(errorResponse);
-}
+};
 
+app.use(cors());
 app.get("/", (req, res, next) => {
   MongoClient.connect(
     "mongodb://mongodb:27017/admin",
