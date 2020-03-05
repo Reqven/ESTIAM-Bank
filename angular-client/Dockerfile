@@ -1,10 +1,10 @@
 FROM node:lts
 
 WORKDIR /usr/src/app
-COPY ./angular-client/ ./
-COPY ./angular-client/start /etc/init.d/start
+COPY ./angular-client/app/ ./
+COPY ./angular-client/entrypoint.sh /etc/init.d/entrypoint
 
-EXPOSE 8181
+EXPOSE 4200
 
-RUN chmod +x /etc/init.d/start
-CMD /etc/init.d/start
+RUN chmod +x /etc/init.d/entrypoint
+CMD /etc/init.d/entrypoint
