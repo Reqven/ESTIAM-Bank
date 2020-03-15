@@ -1,13 +1,15 @@
 const cors = require("cors");
 const express = require("express");
+const bodyParser = require("body-parser");
 const HttpError = require("http-errors");
 const HttpStatus = require("http-status-codes");
-const MongoClient = require("mongodb").MongoClient;
 
-// Constants
-const PORT = 8080;
-const HOST = "0.0.0.0";
-const app = express();
+const environment = require('./config/environment');
+const authMiddleware = require('./middlewares/auth');
+const securityRoutes = require('./routes/security');
+const userRoutes = require('./routes/user');
+const db = require('./config/database');
+
 
 const errorHandler = (error, req, res, next) => {
   console.error(error);
@@ -16,27 +18,15 @@ const errorHandler = (error, req, res, next) => {
   return res.status(errorResponse.statusCode).json(errorResponse);
 };
 
-app.use(cors());
-app.get("/", (req, res, next) => {
-  MongoClient.connect(
-    "mongodb://mongodb:27017/admin",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    },
-    (err, db) => {
-      if (err) {
-        console.log(err);
-        return next(
-          HttpError.InternalServerError("Unable to connect to MongoDB")
-        );
-      }
-      const response = { message: "Connection successful to MongoDB" };
-      return res.status(HttpStatus.OK).json(response);
-    }
-  );
-});
+const app = express();
 
+app.use(cors());
+app.use(bodyParser.json());
+app.use(authMiddleware.passport.initialize());
+
+app.use(securityRoutes);
+app.use('/user', userRoutes);
 app.use(errorHandler);
-app.listen(PORT, HOST);
-console.log(`Running on http://${HOST}:${PORT}`);
+
+app.listen(environment.port, environment.host);
+console.log(`Running on http://${environment.host}:${environment.port}`);
