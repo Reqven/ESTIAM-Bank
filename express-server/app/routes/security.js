@@ -20,11 +20,11 @@ router.get('/', (req, res, next) => {
         .catch(() => next(HttpError.InternalServerError('Unable to connect to MongoDB')));
 });
 
-router.post('/token', (req, res, next) => {
-    let { username, password } = req.body;
-    if (username === undefined || password === undefined) throw new HttpError.BadRequest;
+router.post('/auth/token', (req, res, next) => {
+    let { email, password } = req.body;
+    if (email === undefined || password === undefined) throw new HttpError.BadRequest;
 
-    User.findOne({ username })
+    User.findOne({ email })
         .then(user => {
             if (!user) return next(HttpError.Unauthorized());
 
@@ -34,16 +34,13 @@ router.post('/token', (req, res, next) => {
 
                 let payload = { id: user._id };
                 let token = jwt.sign(payload, environment.secretKey);
-                return res.status(HttpStatus.OK).json({ token });
+                return res.json({ token });
             });
         }).catch(err => next(err));
 });
 
 router.post('/register', (req, res, next) => {
-    let { username, password } = req.body;
-    if (username === undefined || password === undefined) throw new HttpError.BadRequest;
-
-    const user = new User({ username, password });
+    const user = new User(User.convert(req.body));
     user.save()
         .then(user => res.json(user))
         .catch(err => next(err));

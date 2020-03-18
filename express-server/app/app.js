@@ -10,12 +10,23 @@ const securityRoutes = require('./routes/security');
 const userRoutes = require('./routes/user');
 const db = require('./config/database');
 
+const mongoose = require('mongoose');
+
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error);
-  const isHttp = error instanceof HttpError.HttpError;
-  const errorResponse = isHttp ? error : HttpError.InternalServerError();
-  return res.status(errorResponse.statusCode).json(errorResponse);
+  console.log(error);
+  let response = HttpError.InternalServerError();
+  if (error instanceof HttpError.HttpError) {
+    response = error;
+  }
+  if (error instanceof mongoose.Error.ValidationError) {
+    response = new HttpError(HttpStatus.BAD_REQUEST, error._message, {
+      errors: Object.values(error.errors)
+        .filter(e => !e.errors)
+        .map(e => e.message)
+    });
+  }
+  return res.status(response.statusCode).json(response);
 };
 
 const app = express();
