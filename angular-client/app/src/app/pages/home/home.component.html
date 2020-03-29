@@ -1,1 +1,4 @@
 <h1>Home</h1>
+<ng-container *ngIf="message$ | async as response">
+  {{ response | json }}
+</ng-container>

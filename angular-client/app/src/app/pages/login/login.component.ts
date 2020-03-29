@@ -3,6 +3,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {catchError, tap} from 'rxjs/operators';
 import {EMPTY} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +16,10 @@ export class LoginComponent implements OnInit {
   private loginForm: FormGroup;
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {
     this.createForm();
   }
@@ -24,9 +28,13 @@ export class LoginComponent implements OnInit {
 
   createForm(): void {
     this.loginForm = this.formBuilder.group({
-      email:      new FormControl('', Validators.required),
+      email:      new FormControl('', [Validators.required, Validators.email]),
       password:   new FormControl('', Validators.required)
     });
+  }
+
+  onReset() {
+    this.loginForm.reset();
   }
 
   onSubmit() {
@@ -40,13 +48,13 @@ export class LoginComponent implements OnInit {
       ).subscribe();
   }
 
-  onLoginSuccess = async () => {
-    alert('Login success !');
+  onLoginSuccess = () => {
+    this.snackBar.open('Login successful', null, { duration: 2000 });
+    return this.router.navigateByUrl('/');
   }
 
-  onLoginFail = (error: any) => {
-    alert('Login failed !');
+  onLoginFail = (error) => {
+    this.snackBar.open('Login failed', null, { duration: 2000 });
     return EMPTY;
   }
-
 }

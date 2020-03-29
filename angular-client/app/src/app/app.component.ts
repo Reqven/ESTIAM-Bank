@@ -1,7 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {catchError, first} from 'rxjs/operators';
-import {of} from 'rxjs';
 import {AuthService} from './services/auth.service';
 
 @Component({
@@ -11,16 +8,7 @@ import {AuthService} from './services/auth.service';
 })
 export class AppComponent implements OnInit {
 
-  constructor(
-    private http: HttpClient,
-    private auth: AuthService
-  ) {}
+  constructor(private auth: AuthService) {}
 
-  ngOnInit(): void {
-    this.http.get('http://localhost:8080')
-      .pipe(
-        first(),
-        catchError(e => of(e.error)))
-      .subscribe(console.log);
-  }
+  ngOnInit(): void {}
 }

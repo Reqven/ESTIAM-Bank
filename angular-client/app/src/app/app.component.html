@@ -1,10 +1,21 @@
+<mat-toolbar id="app-toolbar" color="primary">
+  <mat-toolbar-row>
+    <span routerLink="/">Bank</span>
+    <span class="example-spacer"></span>
+    <ng-container *ngIf="!auth.isLogged()">
+      <a mat-button routerLink="/login"> Login </a>
+      <a mat-button routerLink="/register"> Register </a>
+    </ng-container>
+    <ng-container *ngIf="auth.isLogged()">
+      <button mat-icon-button>
+        <mat-icon routerLink="/account">account_circle</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon (click)="auth.logout()">power_settings_new</mat-icon>
+      </button>
+    </ng-container>
+  </mat-toolbar-row>
+</mat-toolbar>
 <div class="app-container">
-  <ul>
-    <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/register">Register</a></li>
-    <li><a routerLink="/account">Account</a></li>
-    <li *ngIf="auth.isLogged()"><a (click)="auth.logout()">Logout</a></li>
-  </ul>
   <router-outlet></router-outlet>
 </div>

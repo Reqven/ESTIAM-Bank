@@ -4,6 +4,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, tap} from 'rxjs/operators';
 import {Credentials} from '../models/credentials';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.init();
   }
@@ -33,6 +35,7 @@ export class AuthService {
 
   logout() {
     this.credentials$.next(null);
+    this.snackBar.open('You have been logged out', null, { duration: 2000 });
     return this.router.navigateByUrl('/login');
   }
 
