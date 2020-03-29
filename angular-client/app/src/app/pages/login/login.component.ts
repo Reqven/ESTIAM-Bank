@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {catchError, tap} from 'rxjs/operators';
-import {EMPTY} from 'rxjs';
+import {throwError} from 'rxjs';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
+import {CustomError} from '../../services/error.service';
 
 @Component({
   selector: 'app-login',
@@ -54,7 +55,10 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginFail = (error) => {
-    this.snackBar.open('Login failed', null, { duration: 2000 });
-    return EMPTY;
+    switch (error.status) {
+      case 400: error = new CustomError('Invalid data submitted'); break;
+      case 401: error = new CustomError('Login failed');           break;
+    }
+    return throwError(error);
   }
 }

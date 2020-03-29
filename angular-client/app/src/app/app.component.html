@@ -1,6 +1,9 @@
 <mat-toolbar id="app-toolbar" color="primary">
   <mat-toolbar-row>
-    <span routerLink="/">Bank</span>
+    <a mat-button routerLink="/">
+      <mat-icon svgIcon="angular"></mat-icon>
+      Bank
+    </a>
     <span class="example-spacer"></span>
     <ng-container *ngIf="!auth.isLogged()">
       <a mat-button routerLink="/login"> Login </a>
