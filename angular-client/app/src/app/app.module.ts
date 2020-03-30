@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {ErrorService} from './services/error.service';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {ErrorService} from './services/error.service';
     MatButtonModule,
     MatSelectModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatCardModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorService},

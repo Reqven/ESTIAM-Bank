@@ -10,12 +10,12 @@
       <a mat-button routerLink="/register"> Register </a>
     </ng-container>
     <ng-container *ngIf="auth.isLogged()">
-      <button mat-icon-button>
-        <mat-icon routerLink="/account">account_circle</mat-icon>
-      </button>
-      <button mat-icon-button>
-        <mat-icon (click)="auth.logout()">power_settings_new</mat-icon>
-      </button>
+      <a mat-icon-button routerLink="/account">
+        <mat-icon>account_circle</mat-icon>
+      </a>
+      <a mat-icon-button (click)="auth.logout()">
+        <mat-icon>power_settings_new</mat-icon>
+      </a>
     </ng-container>
   </mat-toolbar-row>
 </mat-toolbar>
