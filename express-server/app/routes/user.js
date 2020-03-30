@@ -7,10 +7,10 @@ const authMiddleware = require('../middlewares/auth');
 const User = require('../models/user');
 
 
-router.get('/', authMiddleware.authenticateRoute((req, res, next) => {
+router.get('/', (req, res, next) => {
     User.find()
         .then(users => res.json(users))
         .catch(err => next(err));
-}));
+});
 
 module.exports = router;

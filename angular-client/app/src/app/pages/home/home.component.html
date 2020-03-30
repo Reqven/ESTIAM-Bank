@@ -1,4 +1,36 @@
-<h1>Home</h1>
-<ng-container *ngIf="message$ | async as response">
-  {{ response | json }}
-</ng-container>
+<mat-toolbar color="primary">
+  <h1>Home</h1>
+</mat-toolbar>
+
+<mat-list>
+  <div mat-subheader>Service status</div>
+  <mat-list-item *ngIf="{ result: api$ | async } as _" >
+    <mat-icon mat-list-icon>dns</mat-icon>
+    <div mat-line>API</div>
+    <div mat-line *ngIf="_.result">{{ _.result | json }}</div>
+    <app-state-widget #apiWidget></app-state-widget>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <ng-container *ngIf="{ response: users$ | async } as _">
+    <div mat-subheader>Registered users</div>
+    <mat-list-item>
+      <mat-icon mat-list-icon>supervisor_account</mat-icon>
+      <div mat-line>Details</div>
+      <div mat-line>
+        <ng-container *ngIf="!_.response">Loading users..</ng-container>
+        <ng-container *ngIf="_.response">
+          <div mat-line *ngIf="_.response.success">{{ _.response.users.length }} users found</div>
+          <div mat-line *ngIf="!_.response.success">Unable to load users</div>
+        </ng-container>
+      </div>
+      <app-state-widget #usersWidget></app-state-widget>
+    </mat-list-item>
+    <ng-container *ngIf="_.response">
+      <mat-list-item *ngFor="let user of _.response.users">
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <div mat-line>{{ user.firstName }} {{ user.lastName }}</div>
+        <div mat-line>{{ user.email }}</div>
+      </mat-list-item>
+    </ng-container>
+  </ng-container>
+</mat-list>

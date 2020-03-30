@@ -1,24 +1,26 @@
-<mat-toolbar id="app-toolbar" color="primary">
-  <mat-toolbar-row>
-    <a mat-button routerLink="/">
-      <mat-icon svgIcon="angular"></mat-icon>
-      Bank
-    </a>
-    <span class="example-spacer"></span>
-    <ng-container *ngIf="!auth.isLogged()">
-      <a mat-button routerLink="/login"> Login </a>
-      <a mat-button routerLink="/register"> Register </a>
-    </ng-container>
-    <ng-container *ngIf="auth.isLogged()">
-      <a mat-icon-button routerLink="/account">
-        <mat-icon>account_circle</mat-icon>
+<div class="app">
+  <mat-toolbar class="app-toolbar mat-elevation-z6" color="primary" >
+    <mat-toolbar-row>
+      <a mat-button routerLink="/">
+        <mat-icon svgIcon="angular"></mat-icon>
+        Bank
       </a>
-      <a mat-icon-button (click)="auth.logout()">
-        <mat-icon>power_settings_new</mat-icon>
-      </a>
-    </ng-container>
-  </mat-toolbar-row>
-</mat-toolbar>
-<div class="app-container">
-  <router-outlet></router-outlet>
+      <span class="example-spacer"></span>
+      <ng-container *ngIf="!auth.isLogged()">
+        <a mat-button routerLink="/login"> Login </a>
+        <a mat-raised-button routerLink="/register"> Register </a>
+      </ng-container>
+      <ng-container *ngIf="auth.isLogged()">
+        <a mat-icon-button routerLink="/account">
+          <mat-icon>account_circle</mat-icon>
+        </a>
+        <a mat-icon-button (click)="auth.logout()">
+          <mat-icon>power_settings_new</mat-icon>
+        </a>
+      </ng-container>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="app-container">
+    <router-outlet></router-outlet>
+  </div>
 </div>

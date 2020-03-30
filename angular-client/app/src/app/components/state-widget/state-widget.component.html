@@ -1,0 +1,5 @@
+<mat-spinner diameter="25" *ngIf="state === States.LOADING"></mat-spinner>
+<ng-container *ngIf="state !== States.LOADING">
+  <mat-icon *ngIf="state === States.OK">check_circle</mat-icon>
+  <mat-icon *ngIf="state === States.ERROR">cancel</mat-icon>
+</ng-container>

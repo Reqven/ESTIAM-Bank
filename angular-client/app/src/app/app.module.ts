@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,8 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {ErrorService} from './services/error.service';
-import {MatCardModule} from "@angular/material/card";
+import { ErrorService } from './services/error.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { StateWidgetComponent } from './components/state-widget/state-widget.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import {MatCardModule} from "@angular/material/card";
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    AccountComponent
+    AccountComponent,
+    StateWidgetComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +44,9 @@ import {MatCardModule} from "@angular/material/card";
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     {provide: ErrorHandler, useClass: ErrorService},
