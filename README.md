@@ -17,3 +17,15 @@ ___
 To update your local git repository, make sure all your containers are **stopped** before pulling new commits, otherwise new dependencies won't be downloaded until you restart the containers, which will most likely crash the app. When your local repository is up-to-date, you can restart the whole stack using
 
     docker-compose up
+
+## Note
+The stack is ready when you see the following line in your console
+
+    angular-client | ** Angular Live Development Server is listening on 0.0.0.0:4200, open your browser on http://localhost:4200/ **
+    
+
+| Service        | Running at             | 
+|----------------|------------------------|
+| angular-client | http://localhost:4200  |
+| express-server | http://localhost:8080  |
+| mongodb        | http://localhost:27017 |
