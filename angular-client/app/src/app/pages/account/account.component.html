@@ -1,3 +1,59 @@
 <mat-toolbar color="primary">
   <h1>Account</h1>
 </mat-toolbar>
+
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <h1>Update</h1>
+  <ng-container *ngIf="errors$ | async as errors">
+    <div class="alert" *ngIf="errors.length">
+      <mat-error *ngFor="let e of errors">{{ e }}</mat-error>
+    </div>
+  </ng-container>
+  <div class="fields">
+    <mat-form-field appearance="outline" *ngIf="userForm.get('firstName') as firstName">
+      <mat-label>First Name</mat-label>
+      <input matInput type="email" formControlName="firstName">
+      <mat-error *ngIf="firstName.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="userForm.get('firstName') as lastName">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="email" formControlName="lastName">
+      <mat-error *ngIf="lastName.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="userForm.get('email') as email">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email">
+      <mat-error *ngIf="email.hasError('email')">Please enter a valid email address</mat-error>
+      <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <ng-container formGroupName="address" *ngIf="userForm.get('address') as addressGroup">
+      <mat-form-field appearance="outline" *ngIf="addressGroup.get('address') as address">
+        <mat-label>Address</mat-label>
+        <input matInput type="text" formControlName="address">
+        <mat-error *ngIf="address.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="addressGroup.get('zipcode') as zipcode">
+        <mat-label>Zipcode</mat-label>
+        <input matInput type="text" formControlName="zipcode">
+        <mat-error *ngIf="zipcode.hasError('pattern') || zipcode.hasError('minlength')">Please enter a valid zipcode</mat-error>
+        <mat-error *ngIf="zipcode.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" *ngIf="addressGroup.get('city') as city">
+        <mat-label>City</mat-label>
+        <input matInput type="text" formControlName="city">
+        <mat-error *ngIf="city.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </ng-container>
+  </div>
+  <div class="buttons">
+    <button mat-raised-button type="button" color="warn" (click)="onDelete()">Delete my account</button>
+    <button mat-raised-button type="submit" color="primary" [disabled]="!userForm.valid">Update</button>
+  </div>
+</form>
+

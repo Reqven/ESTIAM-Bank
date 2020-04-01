@@ -1,6 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
 const HttpError = require('http-errors');
-const HttpStatus = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
@@ -9,6 +8,7 @@ const environment = require('../config/environment');
 const User = require('../models/user');
 
 
+// Check MongoDB connection
 router.get('/', (req, res, next) => {
     let options = {
         useNewUrlParser: true,
@@ -20,6 +20,7 @@ router.get('/', (req, res, next) => {
         .catch(() => next(HttpError.InternalServerError('Unable to connect to MongoDB')));
 });
 
+// Authenticate user to access protected routes with jwt
 router.post('/auth/token', (req, res, next) => {
     let { email, password } = req.body;
     if (email === undefined || password === undefined) throw new HttpError.BadRequest;
@@ -37,13 +38,6 @@ router.post('/auth/token', (req, res, next) => {
                 return res.json({ token });
             });
         }).catch(err => next(err));
-});
-
-router.post('/register', (req, res, next) => {
-    const user = new User(User.convert(req.body));
-    user.save()
-        .then(user => res.json(user))
-        .catch(err => next(err));
 });
 
 module.exports = router;

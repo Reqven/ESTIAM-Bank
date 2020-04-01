@@ -11,7 +11,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 })
 export class AuthService {
 
-  private readonly cacheKey = '_credentials';
+  private readonly _cacheKey = '_credentials';
   private readonly _ready$ = new BehaviorSubject<boolean>(false);
   private readonly _credentials$ = new BehaviorSubject<Credentials>(null);
 
@@ -35,6 +35,10 @@ export class AuthService {
       distinctUntilChanged(),
       shareReplay()
     );
+  }
+
+  get credentials(): Credentials {
+    return this._credentials$.value;
   }
 
   login(email: string, password: string): Observable<Credentials> {
@@ -69,10 +73,10 @@ export class AuthService {
   }
 
   private getFromCache = (): Credentials => {
-    return JSON.parse(localStorage.getItem(this.cacheKey)) as Credentials;
+    return JSON.parse(localStorage.getItem(this._cacheKey)) as Credentials;
   }
 
   private saveToCache = (credentials: Credentials): void => {
-    localStorage.setItem(this.cacheKey, JSON.stringify(credentials));
+    localStorage.setItem(this._cacheKey, JSON.stringify(credentials));
   }
 }

@@ -1,0 +1,27 @@
+.alert {
+  padding: 25px 10px;
+  font-size: 75%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 450px;
+  margin: auto;
+  padding: 10px;
+}
+.fields, .buttons {
+  display: flex;
+}
+.fields > *, .buttons > * {
+  flex: 1;
+}
+.fields {
+  flex-direction: column;
+}
+.buttons > :not(:last-child) {
+  margin-right: 10px;
+}
+h1 {
+  text-align: center;
+}

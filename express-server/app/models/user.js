@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema(SchemaDefinition, { bufferCommands: false
 
 
 UserSchema.path('email').validate(function (email) {
-    return this.model('User').count({ email }).then(count => !count);
+    return mongoose.model('User', UserSchema).count({ email }).then(count => !count);
 }, 'Email address is already used');
 
 UserSchema.pre('save', function (next) {
@@ -43,6 +43,18 @@ UserSchema.pre('save', function (next) {
         bcrypt.genSalt(10).then(salt => {
             bcrypt.hash(user.password, salt).then(hash => {
                 user.password = hash;
+                next();
+            })
+        }).catch(err => next(err));
+    } else next();
+});
+
+UserSchema.pre('updateOne', function(next) {
+    const password = this.getUpdate().password;
+    if (password) {
+        bcrypt.genSalt(10).then(salt => {
+            bcrypt.hash(password, salt).then(hash => {
+                this.getUpdate().password = hash;
                 next();
             })
         }).catch(err => next(err));

@@ -1,5 +1,6 @@
 const cors = require("cors");
 const express = require("express");
+const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const HttpError = require("http-errors");
 const HttpStatus = require("http-status-codes");
@@ -10,9 +11,8 @@ const securityRoutes = require('./routes/security');
 const userRoutes = require('./routes/user');
 const db = require('./config/database');
 
-const mongoose = require('mongoose');
 
-
+// Custom error handler to prevent server from crashing
 const errorHandler = (error, req, res, next) => {
   console.log(error);
   let response = HttpError.InternalServerError();
@@ -31,13 +31,18 @@ const errorHandler = (error, req, res, next) => {
 
 const app = express();
 
+// Configure server
 app.use(cors());
 app.use(bodyParser.json());
 app.use(authMiddleware.passport.initialize());
 
+// Define API routes
 app.use(securityRoutes);
-app.use('/user', userRoutes);
+app.use(userRoutes);
+
+// Use custom error handler
 app.use(errorHandler);
 
+// Start server
 app.listen(environment.port, environment.host);
 console.log(`Running on http://${environment.host}:${environment.port}`);

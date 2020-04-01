@@ -7,6 +7,7 @@ const environment = require('../config/environment');
 const User = require('../models/user');
 
 
+// Define JwtStrategy to authenticate users
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
     secretOrKey: environment.secretKey
