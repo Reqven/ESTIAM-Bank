@@ -1,0 +1,238 @@
+swagger: "2.0"
+info:
+  description: "Bank web application using MongoDB, Express and Angular. This Swagger describes the API exposed by the NodeJS server using Express. "
+  version: "1.0.0"
+  title: "ESTIAM-Bank"
+host: "localhost:8080"
+tags:
+  - name: "security"
+    description: "Operations about security"
+  - name: "user"
+    description: "Operations about user"
+schemes:
+  - "http"
+paths:
+  /:
+    get:
+      tags:
+      - "security"
+      summary: "Get MongoDB status"
+      description: "Get MongoDB connection status"
+      operationId: "getMongoDB"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK. Connection successful to MongoDB"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+        500:
+          description: "Interval Server Error. Unable to connect to MongoDB"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
+  
+  /auth/token:
+    post:
+      tags:
+      - "security"
+      summary: "Generate token"
+      description: "Generate jwt with your credentials to access protected endpoints"
+      operationId: "getToken"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "credentials"
+        description: "User credentials"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+            password:
+              type: "string"
+      responses:
+        200:
+          description: "OK. JWT successfully generated"
+          schema:
+            type: "object"
+            properties:
+              token:
+                type: "string"
+        400:
+          description: "Bad Request. Invalid credentials"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+  
+  /user:
+    get:
+      tags:
+      - "user"
+      summary: "Get users"
+      description: "Get all users"
+      operationId: "getUsers"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK. Users successfully retrieved"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "Create a new user"
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "User object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "OK. User successfully created"
+        400:
+          description: "Bad Request. User validation failed"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+        
+  /user/account:
+    get:
+      tags:
+      - "user"
+      summary: "Get user"
+      description: "Get logged user account"
+      operationId: "getAccount"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK. User successfully returned"
+          schema:
+            $ref: "#/definitions/User"
+        401:
+          description: "Unauthorized. JWT missing or invalid"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+    put:
+      tags:
+      - "user"
+      summary: "Update user"
+      description: "Update logged user account"
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "OK. User successfully updated"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Bad Request. User validation failed"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+        401:
+          description: "Unauthorized. JWT missing or invalid"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "Delete user logged account"
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK. User successfully deleted"
+        401:
+          description: "Unauthorized. JWT missing or invalid"
+          schema:
+            $ref: "#/definitions/HttpErrorResponse"
+          
+securityDefinitions:
+  jwt:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    
+definitions:
+  User:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      address:
+        $ref: "#/definitions/Address"
+    required: [
+      "firstName",
+      "lastName",
+      "email",
+      "password",
+      "address"
+    ]
+    xml:
+      name: "User"
+      
+  Address:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      zipcode:
+        type: "string"
+        minLength: 5
+        maxLength: 5
+      city:
+        type: "string"
+    required: [
+      "address",
+      "zipcode",
+      "city"
+    ]
+    xml:
+      name: "Address"
+      
+  HttpErrorResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      errors:
+        type: "array"
+        items:
+          type: "string"
+    required: ["message"]
+      
+      
+externalDocs:
+  description: "Github"
+  url: "https://github.com/Reqven/ESTIAM-Bank"
