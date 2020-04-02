@@ -42,7 +42,7 @@ const updateAccount = authMiddleware.authenticateRoute((req, res, next) => {
 const deleteAccount = authMiddleware.authenticateRoute((req, res, next) => {
     const _id = Mongoose.Types.ObjectId(req.user.id);
     User.deleteOne({ _id })
-      .then(() => res.json({ message: 'deleted' }))
+      .then(() => res.json({}))
       .catch(err => next(err));
 });
 
